@@ -107,8 +107,9 @@ export const coloringStateField = StateField.define<DecorationSet>({
 				}
 
 				if (txEffect.is(coloringStateEffects.addColorEffect)) {
+					// Replace only a decoration at exactly this range; keep ones that merely share an edge.
 					colorings = colorings.update({
-						filter: (from, to) => txEffect.value.from !== from && txEffect.value.to !== to,
+						filter: (from, to) => txEffect.value.from !== from || txEffect.value.to !== to,
 					});
 
 					const decoration = resolvableStateToDecoration[txEffect.value.state ?? 'pending'];
